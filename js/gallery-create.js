@@ -107,7 +107,6 @@ function onKeyPressHandler(event) {
 
 function slideToNextImage() {
   const nextImageUrl = imagesGallery[getIncrementedIndex()].original;
-  clearImageSrc();
   setImageSrc(nextImageUrl);
 }
 
