@@ -113,7 +113,6 @@ function slideToNextImage() {
 
 function slideToPrevImage() {
   const prevImageUrl = imagesGallery[getDecrementedIndex()].original;
-  clearImageSrc();
   setImageSrc(prevImageUrl);
 }
 
