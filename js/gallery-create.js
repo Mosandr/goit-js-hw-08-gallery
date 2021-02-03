@@ -56,8 +56,12 @@ function onGalleryListClickHandler(event) {
 
 // Открытие модального окна по клику на элементе галереи.
 function modalOpen() {
+  refs.galleryListRef.removeEventListener('click', onGalleryListClickHandler);
   refs.modalRef.classList.add('is-open');
+  refs.modalRef.addEventListener('click', onModalClickHandler);
+  window.addEventListener('keydown', onKeyPressHandler);
 }
+
 // Подмена значения атрибута src элемента img.lightbox__image.
 function setImageSrc(url) {
   refs.originalImage.setAttribute('src', url);
@@ -65,8 +69,6 @@ function setImageSrc(url) {
 
 // Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
 // Закрытие модального окна по клику на div.lightbox__overlay.
-
-refs.modalRef.addEventListener('click', onModalClickHandler);
 
 function onModalClickHandler(event) {
   if (event.target === refs.originalImage) return;
@@ -76,7 +78,11 @@ function onModalClickHandler(event) {
 function modalClose() {
   refs.modalRef.classList.remove('is-open');
   clearImageSrc();
+  refs.modalRef.removeEventListener('click', onModalClickHandler);
+  window.removeEventListener('keydown', onKeyPressHandler);
+  refs.galleryListRef.addEventListener('click', onGalleryListClickHandler);
 }
+
 // Очистка значения атрибута src элемента img.lightbox__image. Это необходимо для того,
 // чтобы при следующем открытии модального окна, пока грузится изображение, мы не видели предыдущее.
 function clearImageSrc() {
@@ -86,9 +92,8 @@ function clearImageSrc() {
 // Закрытие модального окна по нажатию клавиши ESC.
 // Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
 
-window.addEventListener('keydown', onKeyPressHandler);
-
 function onKeyPressHandler(event) {
+  event.preventDefault();
   const isModalOpen = refs.modalRef.classList.contains('is-open');
   const keyPressed = event.key;
   if (!isModalOpen) return;
